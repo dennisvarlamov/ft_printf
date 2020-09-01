@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   pf_width.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nglynis <nglynis@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/01 21:17:40 by nglynis           #+#    #+#             */
-/*   Updated: 2020/09/01 23:34:26 by nglynis          ###   ########.fr       */
+/*   Created: 2020/09/02 00:12:24 by nglynis           #+#    #+#             */
+/*   Updated: 2020/09/02 00:33:26 by nglynis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int		ft_printf(const char *format, ...)
+void    pf_width(t_print *ptr)
 {
-    t_print     ptr;
-
-    ft_bzero(&ptr, sizeof(ptr));
-    ptr.fd = STDOUT;
-    ptr.format = format;
-    va_start(ptr.param, format);
-    pf_cycle(&ptr);
-    va_end(ptr.param);
-    return (ptr.result);
+    char    c;
     
-
+    ptr->width = 0;
+    if (ptr->format[ptr->i] == '*')
+    {
+        ptr->width = va_arg(ptr->param, int);
+        ptr->i++;
+        if (ptr->width < 0)
+            ptr->minus = 1;
+        if (ptr->width < 0)
+            ptr->width = -ptr->width;
+    }
+    c = ptr->format[ptr->i];
+    if (c >= '0' && c <= '9')
+        ptr->width = 0;
+    
 }
-//ft_printf("%s", "Hello World");
